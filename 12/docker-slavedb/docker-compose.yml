@@ -1,0 +1,35 @@
+#version: '3.8'
+services:
+  postgres_replica:
+    image: postgres-cron:12 # 必须与你的主库版本一致
+    container_name: postgres_slavedb
+    restart: always
+    ports:
+      - "5432:5432" # 从库端口映射到宿主机的 5433
+    
+    environment:
+      # 从库的普通环境变量
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: wangchaohua
+      POSTGRES_DB: postgres
+      
+      # 复制连接信息 (重要！请替换为你的主库连接信息)
+      PRIMARY_HOST: 1.1.1.1
+      PRIMARY_PORT: 5432
+      REPLICATION_USER: replicator
+      REPLICATION_PASSWORD: 111111111111
+      #REPLICATION_SLOT: replica_slot_1 # 可选：如果主库配置了复制槽
+      
+    volumes:
+      - ./data:/var/lib/postgresql/data
+      # 挂载自定义启动脚本到容器内的 /usr/local/bin/
+      - ./start-replica.sh:/usr/local/bin/start-replica.sh
+    
+    # 覆盖默认的启动命令，确保先执行初始化逻辑
+    command: ["/usr/local/bin/start-replica.sh"]
+    
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
