@@ -1,5 +1,5 @@
 ```
-采用docker 部署postgres库
+采用docker 部署postgres从库
 Dockfile 是给数据库添加postgresql-12-cron模块
 将 docker-compose-linux-x86_64 放到/usr/local/bin/docker-compose
 start-replica.sh 首次运行自动同步
@@ -18,6 +18,7 @@ modiflyconfig.sh 启动后修改配置文件后再次重启 docker-compose 即�
 3. build
 
 > docker build -t myimage:tag .
+
 
 
 
