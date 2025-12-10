@@ -21,8 +21,11 @@ modiflyconfig.sh 启动后修改配置文件后再次重启 docker-compose 即�
 
 4. tag
 > docker tag my_local_image_name wangchaohua/postgres-cron:12
+
 or
+
 > docker tag aedd3febf483 wangchaohua/postgres-cron:12
+
 
 
 
